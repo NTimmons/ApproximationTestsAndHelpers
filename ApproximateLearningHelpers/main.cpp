@@ -25,6 +25,8 @@
 #include "Timing.h"
 // Simple Vector Classes
 #include "VectorClasses.h"
+// Loop Perforation
+#include "LoopPerforation.h"
 
 #include "UnitTestingResources.h"
 
@@ -216,7 +218,28 @@ int main()
 
     }
 
+    //Loop Perforation
+    {
 
+        //Goal is to reduce the compute operations.
+        constexpr float input = 2;
+
+        std::cout << "Unrolled-Loop Based Output is: " << ForLoopAccurate(input) << "\n";
+        std::cout << "Loop Based Output is: " << UnrolledLoopAccurate(input) << "\n";
+        std::cout << "\n\n";
+
+        std::cout << "Loop Based Approximate Output is: " << HandEditedLoopApproximate(input) << "\n";
+        std::cout << "Unrolled Loop Based Approximate Output is: " << HandEditedUnrolledApproximate(input) << "\n";
+        std::cout << "Automated Approximate Output is: " << ConstExprApproximate(input) << "\n";
+
+        int idxRight = ForLoopBinSearch(testList, 17);
+        int idx0 = ForLoopBinSearchPerforated(testList, 17, 2);
+        int idx1 = ForLoopBinSearchPerforated(testList, 17, 1);
+
+        int testVal = 7;
+        int idxTestRef = ForLoopBinSearch(testList, testVal);
+        int idxtest0 = ForLoopBinSearchPerforated(testList, testVal, GetMaxStepSkip(testList.size(), 1, 4));
+    }
 
     //Compile Time Table [Test]
     {

@@ -127,6 +127,7 @@
     <ClInclude Include="FloatAnalysis.h" />
     <ClInclude Include="FunctionLevelCache.h" />
     <ClInclude Include="FunctionLevelCacheMemoisation.h" />
+    <ClInclude Include="LoopPerforation.h" />
     <ClInclude Include="Preprocessor.h" />
     <ClInclude Include="Testing.h" />
     <ClInclude Include="Timing.h" />
