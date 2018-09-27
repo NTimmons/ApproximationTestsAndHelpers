@@ -32,7 +32,7 @@
 
 #include <algorithm>
 #include <numeric>
-
+#include <cstdlib>
 
 
 
@@ -52,19 +52,19 @@ void ApproxCacheTest()
 
 unsigned int DivHash(float _input)
 {
-    float res = 1.0f - ( (_input/float(DIVISOR)) / TWOPI);
-    int index = res*(HASHTABLESIZE - 1);
+    float res = 1.0f - ( (_input/float(DIVISOR)) / (float)TWOPI);
+    int index = (int)(res*(HASHTABLESIZE - 1));
 
     return std::max(0, std::min(index, HASHTABLESIZE));
 }
 
 unsigned int dydxSinHash(float _input)
 {
-    float maxOverStep = (STEP * 10);
-    float res = (_input / TWOPI);
+    float maxOverStep = float(STEP * 10);
+    float res = float(_input / TWOPI);
     res = res + ( std::abs(std::cos(_input)) * maxOverStep);
     res -= maxOverStep;
-    int index = res*(HASHTABLESIZE - 1);
+    int index = int(res*(HASHTABLESIZE - 1));
     std::cout << "Res:" << res << "\n";
     std::cout << "Index:" << index << "\n";
     return std::max(0 , std::min(index, HASHTABLESIZE-1) );
@@ -104,7 +104,7 @@ constexpr int gRequiredFloatAccuracy = 10;
 
 float FullAccuracyFunction( float _input)
 {
-	return _input + 0.4444444;
+	return _input + 0.4444444f;
 }
 
 template<int AccuracyScore>
@@ -143,10 +143,12 @@ float SimpleFunction(float inputValue)
 int main()
 {
 	// Approx Types
+    if (false)
 	{
 		float res = SimpleFunction(10.f);
 	}
     // AST Test
+    if (false)
     {
         ASTWrapper<float> a(4, T_INPUT);
         auto b = XCubed(a);
@@ -170,11 +172,12 @@ int main()
     }
 
     //Trending Memoisation
-    TestTheTrend();
+    if (false)
+        TestTheTrend();
 
     //Approximation Cache[Test]
+    if (false)
     {    
-        //TODO
         int ff0 = MemoWrapper(add, 80)(5, 5);   // returns 10
         int ff1 = MemoWrapper(add, 80)(2, 1);   // returns 3
         int ff5 = MemoWrapper(add, 80)(5, 33);  // returns 38
@@ -183,15 +186,15 @@ int main()
     }
 
     //Colliding Hash Table [Test]
+    if (false)
     {
-        //TODO
         CollidingHashTable< float, float, HASHTABLESIZE, dydxSinHash> WeightedHashTable;
         CollidingHashTable< float, float, HASHTABLESIZE, DivHash> LinearHashTable;
         std::vector<float> WeightedResults;
         std::vector<float> linearResults;
         std::vector<float> realResults;
         int counter = 0;
-        for (float i = 0 ; counter < 360; i+= (TWOPI/360), counter++)
+        for (float i = 0 ; counter < 360; i+= float(TWOPI/360), counter++)
         {
             float res = SinApprox(i, WeightedHashTable);
             WeightedResults.push_back(res);
@@ -215,22 +218,21 @@ int main()
 
         float linTotalError = std::accumulate(diffLinear.begin(), diffLinear.end(), 0.f);
         std::cout << "Total Error from linear data = " << linTotalError << "\n";
-
     }
 
     //Loop Perforation
+    if (false)
     {
-
         //Goal is to reduce the compute operations.
         constexpr float input = 2;
 
-        std::cout << "Unrolled-Loop Based Output is: " << ForLoopAccurate(input) << "\n";
-        std::cout << "Loop Based Output is: " << UnrolledLoopAccurate(input) << "\n";
+        std::cout << "Unrolled-Loop Based Output is: " << ForLoopAccurate((int)input) << "\n";
+        std::cout << "Loop Based Output is: " << UnrolledLoopAccurate((int)input) << "\n";
         std::cout << "\n\n";
 
-        std::cout << "Loop Based Approximate Output is: " << HandEditedLoopApproximate(input) << "\n";
-        std::cout << "Unrolled Loop Based Approximate Output is: " << HandEditedUnrolledApproximate(input) << "\n";
-        std::cout << "Automated Approximate Output is: " << ConstExprApproximate(input) << "\n";
+        std::cout << "Loop Based Approximate Output is: " << HandEditedLoopApproximate((int)input) << "\n";
+        std::cout << "Unrolled Loop Based Approximate Output is: " << HandEditedUnrolledApproximate((int)input) << "\n";
+        std::cout << "Automated Approximate Output is: " << ConstExprApproximate((int)input) << "\n";
 
         int idxRight = ForLoopBinSearch(testList, 17);
         int idx0 = ForLoopBinSearchPerforated(testList, 17, 2);
@@ -238,7 +240,7 @@ int main()
 
         int testVal = 7;
         int idxTestRef = ForLoopBinSearch(testList, testVal);
-        int idxtest0 = ForLoopBinSearchPerforated(testList, testVal, GetMaxStepSkip(testList.size(), 1, 4));
+        int idxtest0 = ForLoopBinSearchPerforated(testList, testVal, GetMaxStepSkip((int)testList.size(), 1, 4));
     }
 
     //Compile Time Table [Test]
@@ -257,8 +259,12 @@ int main()
     }
 
     //Float Analysis [Test]
+    if (true)
     {
         //TODO
+        float F = SomeMathFloat(22.0000000005f);
+        std::atexit(TypeComparison<float,double>::PrintResults);
+        TypeComparison<float, double>::PrintResults();
     }
 
     //Function Level Cache Memoisation [Test]

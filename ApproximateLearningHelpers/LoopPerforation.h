@@ -3,7 +3,7 @@
 
 constexpr int TermCount = 5;
 constexpr float a[] = { 1,2,3,4,5 };
-constexpr float b[] = { 0.1, 0.5, 0.9, 1.0, 10.0 };
+constexpr float b[] = { 0.1f, 0.5f, 0.9f, 1.0f, 10.0f };
 
 float ForLoopAccurate(int input)
 {
@@ -11,7 +11,7 @@ float ForLoopAccurate(int input)
     float output = 0;
     for (int i = 0; i < TermCount; i++)
     {
-        output += pow(input, a[i])*b[i];
+        output += (float)pow(input, a[i])*b[i];
     }
     return output;
 }
@@ -20,11 +20,11 @@ float UnrolledLoopAccurate(int input)
 {
     //Implementation Unrolled For-Loop
     float output = 0;
-    output = pow(input, a[0])*b[0]
-        + pow(input, a[1])*b[1]
-        + pow(input, a[2])*b[2]
-        + pow(input, a[3])*b[3]
-        + pow(input, a[4])*b[4];
+    output =  (float)pow(input, a[0])*b[0]
+            + (float)pow(input, a[1])*b[1]
+            + (float)pow(input, a[2])*b[2]
+            + (float)pow(input, a[3])*b[3]
+            + (float)pow(input, a[4])*b[4];
     return output;
 }
 
@@ -34,7 +34,7 @@ float HandEditedLoopApproximate(int input)
     float output = 0;
     for (int i = 2; i < TermCount; i++)
     {
-        output += pow(input, a[i])*b[i];
+        output += (float)pow(input, a[i])*b[i];
     }
     return output;
 }
@@ -42,9 +42,9 @@ float HandEditedLoopApproximate(int input)
 float HandEditedUnrolledApproximate(int input)
 {
     float output = 0;
-    output = pow(input, a[2])*b[2]
-        + pow(input, a[3])*b[3]
-        + pow(input, a[4])*b[4];
+    output =  (float)pow(input, a[2])*b[2]
+            + (float)pow(input, a[3])*b[3]
+            + (float)pow(input, a[4])*b[4];
     return output;
 }
 
@@ -89,11 +89,11 @@ std::vector<int> testList = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
 //Binary Search Example
 int ForLoopBinSearch(const std::vector<int>& _inVec, int _val)
 {
-    int top = _inVec.size() - 1;
+    int top = (int)_inVec.size() - 1;
     int bottom = 0;
     int mid = top / 2;
 
-    int maxSteps = log2(_inVec.size());
+    int maxSteps = (int)log2(_inVec.size());
     for (int i = 0; i < maxSteps; i++)
     {
         if (_inVec[mid] == _val)
@@ -117,11 +117,11 @@ int ForLoopBinSearch(const std::vector<int>& _inVec, int _val)
 //Perforated Binary Search
 int ForLoopBinSearchPerforated(const std::vector<int>& _inVec, int _val, int stepReduction = 0)
 {
-    int top = _inVec.size() - 1;
+    int top = (int)_inVec.size() - 1;
     int bottom = 0;
     int mid = top / 2;
 
-    int maxSteps = log2(_inVec.size()) - (stepReduction);
+    int maxSteps = (int)log2(_inVec.size()) - (stepReduction);
     for (int i = 0; i < maxSteps; i++)
     {
         if (_inVec[mid] == _val)
@@ -150,5 +150,5 @@ int GetMaxStepSkip(int _size, int _maxStepSize, int _maxError)
     else if (_maxError == 1)
         return 2;
 
-    return std::min(log2(_size), log2(_maxError / _maxStepSize)) + 1;
+    return (int)std::min(log2(_size), log2(_maxError / _maxStepSize)) + 1;
 }
